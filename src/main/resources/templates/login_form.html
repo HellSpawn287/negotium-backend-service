@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<h1>Please Login</h1>
+
+<p th:if="${message}" th:text="${message}">This will show if user was logged</p>
+
+<form action="#" method="post" th:action="@{/login}">
+    <input name="username" placeholder="Username" type="text"/>
+    <br/><br/>
+    <input name="password" placeholder="Password" type="password"/>
+    <input type="submit" value="Login"/>
+</form>
+</body>
+</html>

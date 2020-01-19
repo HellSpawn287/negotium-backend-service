@@ -1,5 +1,7 @@
 package com.negotium.negotiumapp.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -10,7 +12,8 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email_address")})
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -19,19 +22,26 @@ public class User implements Serializable {
     @Column(name = "id_user")
     private Long id;
 
-    @Column(name = "username", unique = true)
+    @Column(name = "username", unique = true, nullable = false)
     @Size(max = 32, message = "{com.negotium.negotiumapp.model.user.User.username.Size}")
     @NotNull(message = "{com.negotium.negotiumapp.model.user.User.username.NotEmpty}")
     private String username;
 
+    @JsonIgnore
     @Column(name = "password")
     @NotNull(message = "{com.negotium.negotiumapp.model.user.User.password.NotEmpty}")
     @Size(min = 8, message = "{com.negotium.negotiumapp.model.user.User.password.Size}")
     private String password;
 
-    @Column(name = "email_address", unique = true)
+    @Column(name = "email_address", unique = true, nullable = false)
     @Email(message = "{com.negotium.negotiumapp.model.user.User.email.Email}")
     private String email;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    private String providerId;
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
@@ -43,10 +53,12 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String username, String password, String email) {
+    public User(String username, String password, String email, @NotNull AuthProvider provider, String providerId) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.provider = provider;
+        this.providerId = providerId;
     }
 
     public Long getId() {
@@ -87,6 +99,22 @@ public class User implements Serializable {
 
     public void setRoles(Set<UserRole> roles) {
         this.roles = roles;
+    }
+
+    public AuthProvider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(AuthProvider provider) {
+        this.provider = provider;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
     }
 
     @Override

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+<header>
+    <h1 class="logo">My Pocket &lt; /&gt;</h1>
+
+    <nav id="topnav">
+        <div class="menu">
+            <li><a href="/">Strona główna<a/></li>
+            <li><a href="#" th:href="@{/userpanel}">Panel użytkownika<a/></li>
+            <li><a href="#" th:href="@{/register}">Rejestracja<a/></li>
+            <li><a href="#" th:href="@{/login}" th:if="${login}" th:text="${login}">Zaloguj<a/></li>
+            <li><a href="#" th:if="${logout}" th:text="${logout}">Wyloguj<a/></li>
+        </div>
+
+        </ul>
+    </nav>
+</header>
+
+
+<h2>Hello in my world!</h2>
+
+
+<h1>Register User (Validator)</h1>
+<p th:if="validationMessage" th:text="${validationMessage}">Default validation message</p>
+
+<p th:if="${message}" th:text="${message}">This will show if user was added</p>
+
+<form action="#" method="post" th:action="@{/register}" th:object="${user}">
+    <p th:errors="*{username}" th:if="${#fields.hasErrors('username')}">Username errors</p>
+    <input placeholder="Username" th:field="*{username}" type="text"/>
+    <br/><br/>
+    <p th:errors="*{password}" th:if="${#fields.hasErrors('password')}">Password errors</p>
+    <input placeholder="Password" th:field="*{password}" type="password"/>
+    <br/><br/>
+    <p th:errors="*{email}" th:if="${#fields.hasErrors('email')}">Email errors</p>
+    <input placeholder="E-mail" th:field="*{email}" type="email"/>
+    <br/><br/>
+    <input type="submit" value="Register"/>
+</form>
+
+<br/>
+<a href="/">Wracaj na mejna</a>
+
+
+</body>
+</html>
